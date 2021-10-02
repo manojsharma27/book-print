@@ -1,0 +1,8 @@
+docker run \
+	       --name pg_book_print \
+	       -e POSTGRES_DB=book_print_db \
+		   -e POSTGRES_USER=book_user \
+		   -e POSTGRES_PASSWORD=p@55w0rd! \
+		   -p 5432:5432 \
+		   -it \
+		   postgres:11.8
