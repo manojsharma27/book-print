@@ -6,13 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -21,39 +17,21 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "product_info", schema = "book")
 @Entity(name = "product_info")
-public class ProductInfoEntity {
+public class ProductInfoEntity extends AuditEntity {
+
     @Id
-    @Column(name = "consumerid")
-    private String consumerId;
+    @GeneratedValue
+    @Column(name = "id")
+    private int id;
 
-    @Column(name = "emailid")
-    private String email;
+    @Column(name = "description", length = 1000)
+    private String description;
 
-    @Column(name = "webid")
-    private String webId;
+    @Column(name = "base_price", columnDefinition = "numeric")
+    private double basePrice;
 
-    @Column(name = "userid")
-    private String userId;
-
-    @Column(name = "oktaid")
-    private String oktaId;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_logged_in")
-    private Date lastLoggedIn;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createtime")
-    private Date createdDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modifiedtime")
-    private Date modifiedDate;
-
-    @Column(name = "created_by")
-    private String createdBy;
-
-    @Column(name = "modified_by")
-    private String modifiedby;
+    @OneToOne
+    @JoinColumn(name = "product_type_id", referencedColumnName = "id")
+    private ProductTypeEntity productTypeEntity;
 
 }
