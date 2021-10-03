@@ -31,6 +31,9 @@ public class ProductEntity extends AuditEntity {
     @org.hibernate.annotations.Type(type="pg-uuid")
     private UUID id;
 
+    @Column(name = "name", length = 100)
+    private String name;
+
     @Column(name = "price", columnDefinition = "numeric")
     private double price;
 

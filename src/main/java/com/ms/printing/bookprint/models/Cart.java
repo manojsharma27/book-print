@@ -1,0 +1,25 @@
+package com.ms.printing.bookprint.models;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.Map;
+import java.util.UUID;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class Cart {
+    private UUID id;
+    private Map<Product, Integer> items;
+    private double totalAmount;
+    private double discount;
+    private double amountToPay;
+}

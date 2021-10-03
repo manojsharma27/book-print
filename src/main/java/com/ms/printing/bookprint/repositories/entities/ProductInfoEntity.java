@@ -31,6 +31,9 @@ public class ProductInfoEntity extends AuditEntity {
     @Column(name = "description", length = 1000)
     private String description;
 
+    @Column(name = "image_url", length = 1000)
+    private String imageUrl;
+
     @Column(name = "base_price", columnDefinition = "numeric")
     private double basePrice;
 

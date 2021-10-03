@@ -1,5 +1,6 @@
 package com.ms.printing.bookprint.repositories.entities;
 
+import com.ms.printing.bookprint.enums.PaymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -24,7 +27,8 @@ public class PaymentMethodEntity {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "name", length = 50)
-    private String name;
+    @Column(name = "method", length = 50)
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod method;
 
 }
