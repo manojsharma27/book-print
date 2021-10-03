@@ -2,12 +2,13 @@ package com.ms.printing.bookprint.repositories.converters;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
+import org.postgresql.util.PGobject;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import org.postgresql.util.PGobject;
+import java.io.IOException;
 
 @Converter(autoApply = true)
 public class JsonConverter implements AttributeConverter<JsonObject, Object> {

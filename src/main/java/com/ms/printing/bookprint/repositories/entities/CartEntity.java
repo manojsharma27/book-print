@@ -1,10 +1,18 @@
 package com.ms.printing.bookprint.repositories.entities;
 
-import com.ms.printing.bookprint.repositories.converters.JsonConverter;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.json.JsonObject;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +32,9 @@ public class CartEntity extends AuditEntity {
 
     @Column(name = "total", columnDefinition = "numeric")
     private double price;
+
+    @Column(name = "checked_out", columnDefinition = "boolean")
+    private boolean checkedOut;
 
     @OneToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")

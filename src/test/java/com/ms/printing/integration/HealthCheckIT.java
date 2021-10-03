@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 
 public class HealthCheckIT extends BookPrintITBase {
 
-
     @Before
     public void init() {
         setupBase();

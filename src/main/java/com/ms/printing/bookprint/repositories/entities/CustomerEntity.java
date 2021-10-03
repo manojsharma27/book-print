@@ -1,8 +1,16 @@
 package com.ms.printing.bookprint.repositories.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import java.util.UUID;
 
 @Getter
@@ -10,7 +18,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "customer", schema = "book")
+@Table(name = "customer", schema = "book",
+        indexes = {@Index(name = "email_idx", columnList = "email")})
 @Entity(name = "customer")
 public class CustomerEntity extends AuditEntity {
 
@@ -38,6 +47,6 @@ public class CustomerEntity extends AuditEntity {
     private int pincode;
 
     @Column(name = "phone_number", length = 15)
-    private String phone_number;
+    private String phoneNumber;
 
 }

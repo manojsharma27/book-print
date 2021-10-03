@@ -1,9 +1,21 @@
 package com.ms.printing.bookprint.repositories.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Getter
 @Setter
@@ -11,7 +23,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "cart_product_mapping", schema = "book",
-        uniqueConstraints = {@UniqueConstraint(columnNames={"cart_id", "product_id"})})
+        indexes = {@Index(name = "cart_id_idx", columnList = "cart_id")},
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"cart_id", "product_id"})})
 @Entity(name = "cart_product_mapping")
 public class CartProductMappingEntity extends AuditEntity {
 
