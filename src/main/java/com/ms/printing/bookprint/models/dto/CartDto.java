@@ -1,32 +1,31 @@
-package com.ms.printing.bookprint.models;
+package com.ms.printing.bookprint.models.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ms.printing.bookprint.models.Order;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Cart {
+public class CartDto {
     private UUID id;
-    @JsonIgnore
-    private Map<Product, Integer> items;
+    private List<ProductQuantity> products;
     private double totalAmount;
     private double discount;
     private double amountToPay;
     private boolean checkedOut;
     private List<Order> orders;
+
 }

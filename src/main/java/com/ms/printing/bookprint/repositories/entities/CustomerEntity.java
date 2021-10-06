@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "customer", schema = "book",
-        indexes = {@Index(name = "email_idx", columnList = "email")})
+        indexes = {@Index(name = "email_idx", columnList = "email", unique = true)})
 @Entity(name = "customer")
 public class CustomerEntity extends AuditEntity {
 

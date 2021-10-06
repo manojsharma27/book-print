@@ -1,15 +1,16 @@
 package com.ms.printing.bookprint.repositories.entities;
 
-import com.ms.printing.bookprint.repositories.converters.JsonConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
-import javax.json.JsonObject;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table(name = "product", schema = "book")
 @Entity(name = "product")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class ProductEntity extends AuditEntity {
 
     @Id
@@ -37,12 +39,13 @@ public class ProductEntity extends AuditEntity {
     @Column(name = "price", columnDefinition = "numeric")
     private double price;
 
+    @JsonIgnore
     @Column(name = "details_json", nullable = false, columnDefinition = "jsonb")
-    @Convert(converter = JsonConverter.class)
-    private JsonObject detailsJson;
+    @Type(type = "jsonb")
+    private String detailsJson;
 
     @OneToOne
-    @JoinColumn(name = "product_info_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_info_id", referencedColumnName = "id", nullable = false)
     private ProductInfoEntity productInfoEntity;
 
 }

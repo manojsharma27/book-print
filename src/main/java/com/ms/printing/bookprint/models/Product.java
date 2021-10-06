@@ -1,26 +1,48 @@
 package com.ms.printing.bookprint.models;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.ms.printing.bookprint.enums.ProductType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-import javax.json.JsonObject;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Product {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+                @JsonSubTypes.Type(value = Book.class, name = Book.TYPE),
+                @JsonSubTypes.Type(value = Brochure.class, name = Brochure.TYPE)
+})
+public abstract class Product {
     private UUID id;
-    private ProductType type;
+    private ProductType productType;
     private String name;
     private double price;
-    private JsonObject detailsJson;
+    private String imageUrl;
+
+    public abstract String getType();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

@@ -19,13 +19,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {BookPrintException.class})
     protected ResponseEntity<Object> handleBookPrintException(BookPrintException ex, WebRequest request) {
-        LOGGER.error("Exception: {}", ex.getMessage());
+        LOGGER.error("Exception: {}", ex.getMessage(), ex);
         return handleExceptionInternal(ex, ex.getMessage(), getHeaders(), ex.getHttpStatus(), request);
     }
 
     @ExceptionHandler(value = {RuntimeException.class})
     protected ResponseEntity<Object> handleError(RuntimeException ex, WebRequest request) {
-        LOGGER.error("Exception: {}", ex.getMessage());
+        LOGGER.error("Exception: {}", ex.getMessage(), ex);
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 

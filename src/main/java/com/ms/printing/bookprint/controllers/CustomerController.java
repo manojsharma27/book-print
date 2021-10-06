@@ -1,9 +1,11 @@
 package com.ms.printing.bookprint.controllers;
 
 import com.ms.printing.bookprint.models.Customer;
+import com.ms.printing.bookprint.models.dto.CustomerOperationResponse;
 import com.ms.printing.bookprint.service.CustomerService;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +18,7 @@ import javax.annotation.Resource;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/v1/customer")
+@RequestMapping(value = "/v1/customer", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CustomerController {
 
     @Resource
@@ -28,9 +30,9 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> create(@ApiParam(name = "customer", required = true) @RequestBody Customer customer) {
-        UUID uuid = customerService.create(customer);
-        return new ResponseEntity<>(uuid.toString(), HttpStatus.CREATED);
+    public ResponseEntity<CustomerOperationResponse> create(@ApiParam(name = "customer", required = true) @RequestBody Customer customer) {
+        UUID customerId = customerService.create(customer);
+        return new ResponseEntity<>(CustomerOperationResponse.builder().customerId(customerId).message("Created Customer!").build(), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/{customerId}", method = RequestMethod.GET)
@@ -46,8 +48,9 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/{customerId}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> delete(@ApiParam(name = "customerId", required = true) @PathVariable("customerId") String customerId) {
-        customerService.delete(UUID.fromString(customerId));
-        return new ResponseEntity<>("Deleted customer", HttpStatus.OK);
+    public ResponseEntity<CustomerOperationResponse> delete(@ApiParam(name = "customerId", required = true) @PathVariable("customerId") String customerId) {
+        UUID customerIdUuid = UUID.fromString(customerId);
+        customerService.delete(customerIdUuid);
+        return new ResponseEntity<>(CustomerOperationResponse.builder().customerId(customerIdUuid).message("Deleted customer").build(), HttpStatus.OK);
     }
 }

@@ -1,6 +1,7 @@
 package com.ms.printing.integration;
 
 import com.ms.printing.bookprint.models.Customer;
+import com.ms.printing.bookprint.models.dto.CustomerOperationResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class CustomerControllerIT extends BookPrintITBase {
 
@@ -25,9 +27,10 @@ public class CustomerControllerIT extends BookPrintITBase {
     @Test
     public void testCustomerCreateReadDelete() {
         Customer testCustomer = getTestCustomer();
-        ResponseEntity<String> createEntity = createCustomer(testCustomer);
+        ResponseEntity<CustomerOperationResponse> createEntity = createCustomer(testCustomer);
         assertNotNull(createEntity.getBody());
-        UUID customerId = UUID.fromString(createEntity.getBody());
+        assertNotNull(createEntity.getBody().getCustomerId());
+        UUID customerId = createEntity.getBody().getCustomerId();
         createdCustomerIds.add(customerId);
         ResponseEntity<Customer> customerEntity = getCustomerById(customerId);
         Customer customer = customerEntity.getBody();
@@ -58,7 +61,7 @@ public class CustomerControllerIT extends BookPrintITBase {
                 .address("India")
                 .pincode(411029)
                 .phoneNumber("+91 1234567890")
-                .email("lalbahadurshastri@abc.com")
+                .email("lbshastri" + Math.abs(UUID.randomUUID().hashCode()) + "@abc.com")
                 .password("password")
                 .build();
     }

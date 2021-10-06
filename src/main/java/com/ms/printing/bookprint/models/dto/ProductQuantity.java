@@ -1,30 +1,23 @@
-package com.ms.printing.bookprint.models;
+package com.ms.printing.bookprint.models.dto;
+
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ms.printing.bookprint.enums.PaymentMethod;
+import com.ms.printing.bookprint.models.Product;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.Date;
-import java.util.UUID;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Order {
-    private UUID orderId;
-    private Date purchasedOn;
+public class ProductQuantity {
     private Product product;
     private int quantity;
-    private Shipment shipment;
-    private double amount;
-    private PaymentMethod paymentMethod;
 }

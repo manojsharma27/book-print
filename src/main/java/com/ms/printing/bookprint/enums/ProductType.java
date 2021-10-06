@@ -1,7 +1,8 @@
 package com.ms.printing.bookprint.enums;
 
 public enum ProductType {
-    BOOK("Book");
+    BOOK("Book"),
+    BROCHURE("Brochure");
 
     private final String value;
 
