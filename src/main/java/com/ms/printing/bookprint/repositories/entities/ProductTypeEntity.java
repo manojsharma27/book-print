@@ -14,16 +14,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "product_type", schema = "book")
-@Entity(name = "product_type")
+//@Getter
+//@Setter
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Table(name = "product_type", schema = "book")
+//@Entity(name = "product_type")
 public class ProductTypeEntity {
 
     @Id
-    @GeneratedValue
+    //@GeneratedValue
     @Column(name = "id")
     private int id;
 

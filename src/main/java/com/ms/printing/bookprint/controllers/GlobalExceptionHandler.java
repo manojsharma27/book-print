@@ -12,10 +12,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.EntityNotFoundException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(value = {EntityNotFoundException.class})
+    protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
+        LOGGER.error("Exception: {}", ex.getMessage(), ex);
+        return handleExceptionInternal(ex, ex.getMessage(), getHeaders(), HttpStatus.NOT_FOUND, request);
+    }
 
     @ExceptionHandler(value = {BookPrintException.class})
     protected ResponseEntity<Object> handleBookPrintException(BookPrintException ex, WebRequest request) {

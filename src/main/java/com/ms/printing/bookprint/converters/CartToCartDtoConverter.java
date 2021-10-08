@@ -20,22 +20,15 @@ public class CartToCartDtoConverter extends AbstractConverter<Cart, CartDto> {
 
     public CartDto convert(Cart cart) {
         CartDto cartDto = transform(cart, CartDto.class);
-//        CartDto cartDto = CartDto.builder()
-//                .id(cart.getId())
-//                .checkedOut(cart.isCheckedOut())
-//                .totalAmount(cart.getTotalAmount())
-//                .amountToPay(cart.getAmountToPay())
-//                .discount(0)
-//                .orders(Collections.emptyList())
-//                .build();
-
+        cartDto.setDiscount(cart.getDiscount());
+        cartDto.setAmountToPay(cart.getTotalAmount() - cart.getDiscount());
         if (MapUtils.isEmpty(cart.getItems())) {
             cartDto.setProducts(Collections.emptyList());
         } else {
             List<ProductQuantity> productQuantities = cart.getItems().entrySet().stream().map(entry -> ProductQuantity.builder().product(entry.getKey()).quantity(entry.getValue()).build()).collect(Collectors.toList());
             cartDto.setProducts(productQuantities);
         }
-        // populate orders
+
         return cartDto;
     }
 }

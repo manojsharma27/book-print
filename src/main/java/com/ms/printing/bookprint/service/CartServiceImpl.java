@@ -109,7 +109,6 @@ public class CartServiceImpl implements CartService {
         }
 
         mappingEntity.setQuantity(quantity);
-        // recalculate cart price
         cartProductMappingRepository.saveAndFlush(mappingEntity);
         return quantity;
     }

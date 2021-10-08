@@ -21,7 +21,7 @@ public class ProductToProductEntityConverter extends AbstractConverter<Product, 
 
     public ProductEntity convert(Product product) {
         ProductEntity productEntity = transform(product, ProductEntity.class);
-        ProductInfoEntity productInfoEntity = productInfoRepository.findFirstByProductTypeEntityType(product.getProductType());
+        ProductInfoEntity productInfoEntity = productInfoRepository.findFirstByProductType(product.getProductType());
         productEntity.setDetailsJson(jsonUtil.toJson(product));
         productEntity.setProductInfoEntity(productInfoEntity);
         return productEntity;

@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -34,8 +36,8 @@ public class ShipmentEntity extends AuditEntity {
     @Column(name = "pincode", columnDefinition = "integer")
     private int pincode;
 
-    @OneToOne
-    @JoinColumn(name = "shipping_status_id", referencedColumnName = "id")
-    private ShippingStatusEntity shippingStatusEntity;
+    @Column(name = "shipping_status", length = 50)
+    @Enumerated(EnumType.STRING)
+    private ShippingStatus shippingStatus;
 
 }

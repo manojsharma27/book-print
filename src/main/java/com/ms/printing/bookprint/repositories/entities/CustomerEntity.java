@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +19,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "customer", schema = "book",
-        indexes = {@Index(name = "email_idx", columnList = "email", unique = true)})
+@Table(name = "customer", schema = "book")
 @Entity(name = "customer")
 public class CustomerEntity extends AuditEntity {
 

@@ -34,12 +34,13 @@ public class PaymentDetailsEntity extends AuditEntity {
     @Column(name = "amount", columnDefinition = "numeric")
     private double amount;
 
-    @OneToOne
-    @JoinColumn(name = "payment_method_id", referencedColumnName = "id")
-    private PaymentMethodEntity paymentMethodEntity;
+    @Column(name = "payment_method", length = 50)
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
 
-    @OneToOne
-    @JoinColumn(name = "payment_status_id", referencedColumnName = "id")
-    private PaymentStatusEntity paymentStatusEntity;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "payment_status")
+    //@Type( type = "pgsql_enum" )
+    private PaymentStatus paymentStatus;
 
 }

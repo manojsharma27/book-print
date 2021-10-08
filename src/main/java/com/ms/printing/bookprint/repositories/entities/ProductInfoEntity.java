@@ -24,7 +24,7 @@ import javax.persistence.Table;
 public class ProductInfoEntity extends AuditEntity {
 
     @Id
-    @GeneratedValue
+    //@GeneratedValue
     @Column(name = "id")
     private int id;
 
@@ -37,8 +37,8 @@ public class ProductInfoEntity extends AuditEntity {
     @Column(name = "base_price", columnDefinition = "numeric")
     private double basePrice;
 
-    @OneToOne
-    @JoinColumn(name = "product_type_id", referencedColumnName = "id")
-    private ProductTypeEntity productTypeEntity;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "product_type", length = 50)
+    private ProductType productType;
 
 }

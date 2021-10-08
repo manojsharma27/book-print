@@ -14,16 +14,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "shipping_status", schema = "book")
-@Entity(name = "shipping_status")
+//@Getter
+//@Setter
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Builder
+//@Table(name = "shipping_status", schema = "book")
+//@Entity(name = "shipping_status")
 public class ShippingStatusEntity {
 
     @Id
-    @GeneratedValue
+    //@GeneratedValue
     @Column(name = "id")
     private int id;
 

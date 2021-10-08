@@ -11,5 +11,5 @@ import java.util.UUID;
 @Repository
 public interface ProductInfoRepository extends JpaRepository<ProductInfoEntity, UUID> {
 
-    ProductInfoEntity findFirstByProductTypeEntityType(ProductType productType);
+    ProductInfoEntity findFirstByProductType(ProductType productType);
 }

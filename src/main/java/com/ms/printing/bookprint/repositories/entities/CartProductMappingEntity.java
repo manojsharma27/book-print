@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,10 +24,7 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "cart_product_mapping", schema = "book",
-        indexes = {@Index(name = "cart_id_idx", columnList = "cart_id"),
-                @Index(name = "cart_id_product_id_idx", columnList = "cart_id, product_id", unique = true)
-        })
+@Table(name = "cart_product_mapping", schema = "book")
 @Entity(name = "cart_product_mapping")
 public class CartProductMappingEntity extends AuditEntity {
 

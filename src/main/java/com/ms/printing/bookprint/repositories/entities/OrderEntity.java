@@ -50,9 +50,9 @@ public class OrderEntity extends AuditEntity {
     @JoinColumn(name = "payment_details_id", referencedColumnName = "id")
     private PaymentDetailsEntity paymentDetailsEntity;
 
-    @OneToOne
-    @JoinColumn(name = "order_status_id", referencedColumnName = "id")
-    private OrderStatusEntity orderStatusEntity;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "order_status")
+    private OrderStatus orderStatus;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "shipment_id", referencedColumnName = "id")

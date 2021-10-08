@@ -23,7 +23,7 @@ import javax.persistence.Table;
 public class PaymentStatusEntity {
 
     @Id
-    @GeneratedValue
+    //@GeneratedValue
     @Column(name = "id")
     private int id;
 
