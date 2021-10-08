@@ -52,7 +52,6 @@ public class CartToCartEntityConverter extends AbstractConverter<Cart, CartEntit
 
         cartEntity.setCartProductMappingEntities(cartProductMappingEntities);
 
-        // convert order to order entity
         return cartEntity;
     }
 }
