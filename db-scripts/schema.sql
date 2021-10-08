@@ -157,6 +157,8 @@ CREATE TABLE book.shipment (
 
 CREATE INDEX cart_id_idx ON book.cart_product_mapping (cart_id);
 
+CREATE INDEX order_customer_id_idx ON book.order (customer_id);
+
 CREATE UNIQUE INDEX email_idx ON book.customer (email);
 
 -- adding constraints

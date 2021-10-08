@@ -1,7 +1,6 @@
 package com.ms.printing.bookprint.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ms.printing.bookprint.models.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +25,4 @@ public class CartDto {
     private double discount;
     private double amountToPay;
     private boolean checkedOut;
-    private List<Order> orders;
-
 }

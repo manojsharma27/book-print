@@ -1,13 +1,24 @@
 package com.ms.printing.integration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ms.printing.bookprint.Application;
+import com.ms.printing.bookprint.enums.BindingDirection;
+import com.ms.printing.bookprint.enums.BindingType;
+import com.ms.printing.bookprint.enums.BookType;
+import com.ms.printing.bookprint.enums.CoverType;
+import com.ms.printing.bookprint.enums.PaperType;
+import com.ms.printing.bookprint.enums.ProductType;
+import com.ms.printing.bookprint.enums.Size;
+import com.ms.printing.bookprint.models.Binding;
+import com.ms.printing.bookprint.models.Book;
 import com.ms.printing.bookprint.models.Customer;
+import com.ms.printing.bookprint.models.Order;
 import com.ms.printing.bookprint.models.Product;
 import com.ms.printing.bookprint.models.dto.CartDto;
-import com.ms.printing.bookprint.models.dto.CartOperationResponse;
+import com.ms.printing.bookprint.models.dto.OperationResponse;
+import com.ms.printing.bookprint.models.dto.CheckoutInfo;
 import com.ms.printing.bookprint.models.dto.CustomerOperationResponse;
-import com.ms.printing.bookprint.util.ObjectMapperProvider;
+import com.ms.printing.bookprint.repositories.CartProductMappingRepository;
+import com.ms.printing.bookprint.repositories.ProductRepository;
 import com.ms.printing.integration.config.IntegrationTestConfig;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -18,6 +29,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -31,6 +43,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -53,6 +66,7 @@ public abstract class BookPrintITBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(BookPrintITBase.class);
     private static final String CUSTOMER_API = "/v1/customer";
     private static final String CART_API = "/v1/cart";
+    private static final String ORDERS_API = "/v1/orders";
 
     @LocalServerPort
     private int port = 0;
@@ -61,7 +75,10 @@ public abstract class BookPrintITBase {
     private SecurityProperties securityProperties;
 
     @Resource
-    private ObjectMapperProvider objectMapperProvider;
+    private ProductRepository productRepository;
+
+    @Resource
+    private CartProductMappingRepository cartProductMappingRepository;
 
     protected RestTemplate restTemplate;
     protected TestRestTemplate authenticatedTemplate;
@@ -69,6 +86,7 @@ public abstract class BookPrintITBase {
     protected Set<UUID> createdCustomerIds;
     protected Set<UUID> createdProductIds;
     protected Set<UUID> createdCartIds;
+    protected Set<UUID> createdOrderIds;
 
     protected void setupBase() {
         restTemplate = restTemplate();
@@ -77,6 +95,7 @@ public abstract class BookPrintITBase {
         createdCustomerIds = new HashSet<>();
         createdProductIds = new HashSet<>();
         createdCartIds = new HashSet<>();
+        createdOrderIds = new HashSet<>();
     }
 
     protected String url(String partialUrl) {
@@ -108,26 +127,6 @@ public abstract class BookPrintITBase {
         return httpHeaders;
     }
 
-    protected void cleanupTestCustomers() {
-        for (UUID customerId : createdCustomerIds) {
-            try {
-                deleteCustomer(customerId);
-            } catch (RuntimeException e) {
-                LOGGER.warn("Error deleting customer with ID : " + customerId);
-            }
-        }
-    }
-
-    protected void cleanupCarts() {
-        for (UUID cartId : createdCartIds) {
-            try {
-                deleteCart(cartId);
-            } catch (RuntimeException e) {
-                LOGGER.warn("Error deleting cart with ID : " + cartId);
-            }
-        }
-    }
-
     protected ResponseEntity<CustomerOperationResponse> createCustomer(Customer customer) {
         String url = url(CUSTOMER_API);
         HttpEntity<Customer> httpEntity = new HttpEntity<>(customer, httpHeaders);
@@ -155,13 +154,12 @@ public abstract class BookPrintITBase {
         return responseEntity;
     }
 
-    protected ResponseEntity<CustomerOperationResponse> deleteCustomer(UUID customerId) {
+    protected void deleteCustomer(UUID customerId) {
         String url = url(CUSTOMER_API) + "/" + customerId;
         HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
         ResponseEntity<CustomerOperationResponse> responseEntity = authenticatedTemplate.exchange(url, HttpMethod.DELETE, httpEntity, CustomerOperationResponse.class);
         assertNotNull(responseEntity);
         assertEquals(responseEntity.toString(), HttpStatus.OK, responseEntity.getStatusCode());
-        return responseEntity;
     }
 
     protected ResponseEntity<CartDto> getCart(UUID cartId) {
@@ -182,31 +180,134 @@ public abstract class BookPrintITBase {
         return responseEntity;
     }
 
-    protected ResponseEntity<CartOperationResponse> deleteCart(UUID cartId) {
+    protected void clearCart(UUID cartId) {
+        String url = url(CART_API) + "/" + cartId + "/clear";
+        HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<OperationResponse> responseEntity = authenticatedTemplate.exchange(url, HttpMethod.POST, httpEntity, OperationResponse.class);
+        assertNotNull(responseEntity);
+        assertEquals(responseEntity.toString(), HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    protected void deleteCart(UUID cartId) {
         String url = url(CART_API) + "/" + cartId;
         HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<CartOperationResponse> responseEntity = authenticatedTemplate.exchange(url, HttpMethod.DELETE, httpEntity, CartOperationResponse.class);
+        ResponseEntity<OperationResponse> responseEntity = authenticatedTemplate.exchange(url, HttpMethod.DELETE, httpEntity, OperationResponse.class);
         assertNotNull(responseEntity);
         assertEquals(responseEntity.toString(), HttpStatus.OK, responseEntity.getStatusCode());
-        return responseEntity;
     }
 
-    protected ResponseEntity<CartOperationResponse> addProductToCart(UUID cartId, Product product) {
+    protected ResponseEntity<OperationResponse> addProductToCart(UUID cartId, Product product) {
         String url = url(CART_API) + "/" + cartId + "/addProduct";
-        HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<CartOperationResponse> responseEntity = authenticatedTemplate.postForEntity(url, product, CartOperationResponse.class);
+        ResponseEntity<OperationResponse> responseEntity = authenticatedTemplate.postForEntity(url, product, OperationResponse.class);
         assertNotNull(responseEntity);
         assertEquals(responseEntity.toString(), HttpStatus.OK, responseEntity.getStatusCode());
         return responseEntity;
     }
 
-    private String objectToJson(Object obj) {
-        try {
-            return objectMapperProvider.getObjectMapper().writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            LOGGER.error("Cannot convert object to json");
-            throw new RuntimeException(e);
+    protected ResponseEntity<OperationResponse> checkoutCart(UUID cartId, CheckoutInfo checkoutInfo) {
+        String url = url(CART_API) + "/" + cartId + "/checkout";
+        ResponseEntity<OperationResponse> responseEntity = authenticatedTemplate.postForEntity(url, checkoutInfo, OperationResponse.class);
+        assertNotNull(responseEntity);
+        assertEquals(responseEntity.toString(), HttpStatus.CREATED, responseEntity.getStatusCode());
+        return responseEntity;
+    }
+
+    protected ResponseEntity<List<Order>> getOrdersByCustomerId(UUID customerId) {
+        String url = url(ORDERS_API) + "?customerId=" + customerId;
+        HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<List<Order>> responseEntity = authenticatedTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<List<Order>>() {});
+        assertNotNull(responseEntity);
+        assertEquals(responseEntity.toString(), HttpStatus.OK, responseEntity.getStatusCode());
+        return responseEntity;
+    }
+
+    protected ResponseEntity<OperationResponse> deleteOrder(UUID orderId) {
+        String url = url(ORDERS_API) + "/" + orderId;
+        HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<OperationResponse> responseEntity = authenticatedTemplate.exchange(url, HttpMethod.DELETE, httpEntity, OperationResponse.class);
+        assertNotNull(responseEntity);
+        assertEquals(responseEntity.toString(), HttpStatus.OK, responseEntity.getStatusCode());
+        return responseEntity;
+    }
+
+    protected Book getResearchBook() {
+        return Book.builder()
+                .name("Research book")
+                .price(3500)
+                .productType(ProductType.BOOK)
+
+                .bookType(BookType.E_BOOK)
+                .binding(Binding.builder().type(BindingType.REGULAR).direction(BindingDirection.LEFT).build())
+                .paperType(PaperType.BOND)
+                .size(Size.A4)
+                .pages(268)
+
+                .coverType(CoverType.SOFT)
+                .build();
+    }
+
+    protected Book getStoryBook() {
+        return Book.builder()
+                .name("Harry Potter and the Chamber of Secrets")
+                .price(1500)
+                .productType(ProductType.BOOK)
+
+                .bookType(BookType.PAPER)
+                .binding(Binding.builder().type(BindingType.SPIRAL).direction(BindingDirection.LEFT).build())
+                .paperType(PaperType.REGULAR)
+                .size(Size.A4)
+                .pages(301)
+
+                .coverType(CoverType.HARD)
+                .build();
+    }
+
+    protected void cleanupAll() {
+        cleanupOrders();
+        cleanupCarts();
+        cleanupTestCustomers();
+        cleanupProducts();
+    }
+
+    protected void cleanupTestCustomers() {
+        for (UUID customerId : createdCustomerIds) {
+            try {
+                deleteCustomer(customerId);
+            } catch (RuntimeException e) {
+                LOGGER.warn("Error deleting customer with ID : " + customerId);
+            }
         }
     }
 
+    @Transactional
+    protected void cleanupProducts() {
+        for (UUID productId : createdProductIds) {
+            try {
+                productRepository.deleteById(productId);
+            } catch (RuntimeException e) {
+                LOGGER.warn("Error deleting cart with ID : " + productId);
+            }
+        }
+    }
+
+    protected void cleanupCarts() {
+        for (UUID cartId : createdCartIds) {
+            try {
+                clearCart(cartId);
+                deleteCart(cartId);
+            } catch (RuntimeException e) {
+                LOGGER.warn("Error deleting cart with ID : " + cartId);
+            }
+        }
+    }
+
+    protected void cleanupOrders() {
+        for (UUID orderId : createdOrderIds) {
+            try {
+                deleteOrder(orderId);
+            } catch (RuntimeException e) {
+                LOGGER.warn("Error deleting order with ID : " + orderId);
+            }
+        }
+    }
 }

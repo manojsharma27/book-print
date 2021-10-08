@@ -17,8 +17,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CartOperationResponse extends BaseResponse {
+public class OperationResponse extends BaseResponse {
     private UUID cartId;
+    private UUID customerId;
     private UUID productId;
+    private UUID orderId;
     private Integer quantity;
+    private Boolean checkedOut;
 }

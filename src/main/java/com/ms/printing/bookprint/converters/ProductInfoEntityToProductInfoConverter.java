@@ -1,6 +1,5 @@
 package com.ms.printing.bookprint.converters;
 
-import com.ms.printing.bookprint.models.Product;
 import com.ms.printing.bookprint.models.dto.ProductInfo;
 import com.ms.printing.bookprint.repositories.entities.ProductInfoEntity;
 import org.springframework.stereotype.Component;

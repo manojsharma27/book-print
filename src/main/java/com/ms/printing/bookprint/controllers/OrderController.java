@@ -1,9 +1,7 @@
 package com.ms.printing.bookprint.controllers;
 
 import com.ms.printing.bookprint.models.Order;
-import com.ms.printing.bookprint.models.dto.CartDto;
-import com.ms.printing.bookprint.service.CartService;
-import com.ms.printing.bookprint.service.CheckoutService;
+import com.ms.printing.bookprint.models.dto.OperationResponse;
 import com.ms.printing.bookprint.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,5 +39,12 @@ public class OrderController {
     public ResponseEntity<List<Order>> getOrdersForUser(@ApiParam(name = "customerId", required = true) @RequestParam(value = "customerId") String customerId) {
         List<Order> orders = orderService.getOrdersForUser(UUID.fromString(customerId));
         return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{orderId}", method = RequestMethod.DELETE)
+    public ResponseEntity<OperationResponse> delete(@ApiParam(name = "orderId", required = true) @PathVariable("orderId") String orderId) {
+        UUID orderIdUuid = UUID.fromString(orderId);
+        orderService.delete(orderIdUuid);
+        return new ResponseEntity<>(OperationResponse.builder().orderId(orderIdUuid).message("Deleted order").build(), HttpStatus.OK);
     }
 }

@@ -10,4 +10,6 @@ public interface OrderService {
     Order getOrder(UUID orderIdUuid);
 
     List<Order> getOrdersForUser(UUID customerId);
+
+    void delete(UUID orderIdUuid);
 }

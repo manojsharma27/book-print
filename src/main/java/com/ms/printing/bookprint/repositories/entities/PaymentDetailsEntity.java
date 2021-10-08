@@ -1,16 +1,17 @@
 package com.ms.printing.bookprint.repositories.entities;
 
+import com.ms.printing.bookprint.enums.PaymentMethod;
+import com.ms.printing.bookprint.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = true)
 @Table(name = "payment_details", schema = "book")
 @Entity(name = "payment_details")
 public class PaymentDetailsEntity extends AuditEntity {
@@ -40,7 +42,6 @@ public class PaymentDetailsEntity extends AuditEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "payment_status")
-    //@Type( type = "pgsql_enum" )
     private PaymentStatus paymentStatus;
 
 }

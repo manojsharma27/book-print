@@ -1,13 +1,5 @@
 package com.ms.printing.integration;
 
-import com.ms.printing.bookprint.enums.BindingDirection;
-import com.ms.printing.bookprint.enums.BindingType;
-import com.ms.printing.bookprint.enums.BookType;
-import com.ms.printing.bookprint.enums.CoverType;
-import com.ms.printing.bookprint.enums.PaperType;
-import com.ms.printing.bookprint.enums.ProductType;
-import com.ms.printing.bookprint.enums.Size;
-import com.ms.printing.bookprint.models.Binding;
 import com.ms.printing.bookprint.models.Book;
 import com.ms.printing.bookprint.models.Customer;
 import com.ms.printing.bookprint.models.dto.CartDto;
@@ -56,28 +48,26 @@ public class CartControllerIT extends BookPrintITBase {
         createdCartIds.add(cartId);
 
         assertTrue(CollectionUtils.isEmpty(cart.getProducts()));
-        assertTrue(CollectionUtils.isEmpty(cart.getOrders()));
 
         Book researchBook = getResearchBook();
-        ResponseEntity<CartOperationResponse> cartUpdateRespEntity = addProductToCart(cartId, researchBook);
-        CartOperationResponse cartOperationResponse = cartUpdateRespEntity.getBody();
-        assertNotNull(cartOperationResponse);
-        assertEquals(cartId, cartOperationResponse.getCartId());
-        assertNotNull(cartOperationResponse.getProductId());
-        createdProductIds.add(cartOperationResponse.getProductId());
+        ResponseEntity<OperationResponse> cartUpdateRespEntity = addProductToCart(cartId, researchBook);
+        OperationResponse operationResponse = cartUpdateRespEntity.getBody();
+        assertNotNull(operationResponse);
+        assertEquals(cartId, operationResponse.getCartId());
+        assertNotNull(operationResponse.getProductId());
+        createdProductIds.add(operationResponse.getProductId());
 
         Book storyBook = getStoryBook();
         cartUpdateRespEntity = addProductToCart(cartId, storyBook);
         assertNotNull(cartUpdateRespEntity.getBody());
-        assertNotNull(cartOperationResponse.getProductId());
-        createdProductIds.add(cartOperationResponse.getProductId());
+        assertNotNull(operationResponse.getProductId());
+        createdProductIds.add(operationResponse.getProductId());
         cartResponseEntity = getCartUsingCustomerId(customerId);
         cart = cartResponseEntity.getBody();
         assertNotNull(cart);
 
         List<ProductQuantity> products = cart.getProducts();
         assertFalse(CollectionUtils.isEmpty(products));
-        assertTrue(CollectionUtils.isEmpty(cart.getOrders()));
         assertEquals(2, products.size());
 
         assertEquals(researchBook.getName(), products.get(0).getProduct().getName());
@@ -88,7 +78,7 @@ public class CartControllerIT extends BookPrintITBase {
         storyBook.setId(products.get(1).getProduct().getId());
         cartUpdateRespEntity = addProductToCart(cartId, storyBook);
         assertNotNull(cartUpdateRespEntity.getBody());
-        assertNotNull(cartOperationResponse.getProductId());
+        assertNotNull(operationResponse.getProductId());
 
         cartResponseEntity = getCart(cartId);
         cart = cartResponseEntity.getBody();
@@ -116,35 +106,4 @@ public class CartControllerIT extends BookPrintITBase {
                 .build();
     }
 
-    private Book getResearchBook() {
-        return Book.builder()
-                .name("Research book")
-                .price(3500)
-                .productType(ProductType.BOOK)
-
-                .bookType(BookType.E_BOOK)
-                .binding(Binding.builder().type(BindingType.REGULAR).direction(BindingDirection.LEFT).build())
-                .paperType(PaperType.BOND)
-                .size(Size.A4)
-                .pages(268)
-
-                .coverType(CoverType.SOFT)
-                .build();
-    }
-
-    private Book getStoryBook() {
-        return Book.builder()
-                .name("Harry Potter and the Chamber of Secrets")
-                .price(1500)
-                .productType(ProductType.BOOK)
-
-                .bookType(BookType.PAPER)
-                .binding(Binding.builder().type(BindingType.SPIRAL).direction(BindingDirection.LEFT).build())
-                .paperType(PaperType.REGULAR)
-                .size(Size.A4)
-                .pages(301)
-
-                .coverType(CoverType.HARD)
-                .build();
-    }
 }

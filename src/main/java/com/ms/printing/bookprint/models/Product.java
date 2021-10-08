@@ -1,5 +1,6 @@
 package com.ms.printing.bookprint.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.ms.printing.bookprint.enums.ProductType;
@@ -31,6 +32,7 @@ public abstract class Product {
     private double price;
     private String imageUrl;
 
+    @JsonIgnore
     public abstract String getType();
 
     @Override

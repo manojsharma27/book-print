@@ -1,17 +1,18 @@
 package com.ms.printing.bookprint.repositories.entities;
 
+import com.ms.printing.bookprint.enums.ProductType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Getter
@@ -19,12 +20,12 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = true)
 @Table(name = "product_info", schema = "book")
 @Entity(name = "product_info")
 public class ProductInfoEntity extends AuditEntity {
 
     @Id
-    //@GeneratedValue
     @Column(name = "id")
     private int id;
 

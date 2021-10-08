@@ -1,6 +1,9 @@
 package com.ms.printing.bookprint.service;
 
 import com.ms.printing.bookprint.converters.DataModelMapper;
+import com.ms.printing.bookprint.enums.BookType;
+import com.ms.printing.bookprint.enums.ProductType;
+import com.ms.printing.bookprint.models.Book;
 import com.ms.printing.bookprint.models.Cart;
 import com.ms.printing.bookprint.models.Product;
 import com.ms.printing.bookprint.models.dto.CartDto;

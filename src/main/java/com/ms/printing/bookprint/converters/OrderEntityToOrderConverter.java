@@ -1,26 +1,15 @@
 package com.ms.printing.bookprint.converters;
 
-import com.ms.printing.bookprint.enums.OrderStatus;
-import com.ms.printing.bookprint.enums.ShippingStatus;
-import com.ms.printing.bookprint.models.Customer;
 import com.ms.printing.bookprint.models.DeliveryDetails;
 import com.ms.printing.bookprint.models.Order;
 import com.ms.printing.bookprint.models.PaymentInfo;
-import com.ms.printing.bookprint.models.Product;
 import com.ms.printing.bookprint.models.Shipment;
 import com.ms.printing.bookprint.repositories.entities.CustomerEntity;
 import com.ms.printing.bookprint.repositories.entities.OrderEntity;
 import com.ms.printing.bookprint.repositories.entities.PaymentDetailsEntity;
-import com.ms.printing.bookprint.repositories.entities.ProductEntity;
-import com.ms.printing.bookprint.repositories.entities.ShipmentEntity;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
 
 @Component
 public class OrderEntityToOrderConverter extends AbstractConverter<OrderEntity, Order> {
