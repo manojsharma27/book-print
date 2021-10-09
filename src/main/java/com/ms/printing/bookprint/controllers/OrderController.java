@@ -1,6 +1,7 @@
 package com.ms.printing.bookprint.controllers;
 
 import com.ms.printing.bookprint.models.Order;
+import com.ms.printing.bookprint.models.ShipmentTrackingDetails;
 import com.ms.printing.bookprint.models.dto.OperationResponse;
 import com.ms.printing.bookprint.service.OrderService;
 import io.swagger.annotations.Api;
@@ -47,4 +48,12 @@ public class OrderController {
         orderService.delete(orderIdUuid);
         return new ResponseEntity<>(OperationResponse.builder().orderId(orderIdUuid).message("Deleted order").build(), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/{orderId}/track", method = RequestMethod.GET)
+    public ResponseEntity<ShipmentTrackingDetails> trackShipment(@ApiParam(name = "orderId", required = true) @PathVariable("orderId") String orderId) {
+        UUID orderIdUuid = UUID.fromString(orderId);
+        ShipmentTrackingDetails shipmentTrackingDetails = orderService.trackShipment(orderIdUuid);
+        return new ResponseEntity<>(shipmentTrackingDetails, HttpStatus.OK);
+    }
+
 }

@@ -27,7 +27,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         Contact contact = new Contact("Manoj Sharma", "", "");
-        ApiInfo apiInfo = new ApiInfo("Book print service api", "Book print service api.", "API TOS", "Terms of service", contact, "License of API", "API license URL", Collections.emptyList());
+        ApiInfo apiInfo = new ApiInfo("Book Print App", "Provides APIs to interact with Book Print software.", "API TOS", "Terms of service", contact, "License of API", "API license URL", Collections.emptyList());
         return apiInfo;
     }
 }

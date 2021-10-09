@@ -14,12 +14,11 @@ import com.ms.printing.bookprint.models.Customer;
 import com.ms.printing.bookprint.models.Order;
 import com.ms.printing.bookprint.models.Product;
 import com.ms.printing.bookprint.models.dto.CartDto;
-import com.ms.printing.bookprint.models.dto.OperationResponse;
 import com.ms.printing.bookprint.models.dto.CheckoutInfo;
 import com.ms.printing.bookprint.models.dto.CustomerOperationResponse;
+import com.ms.printing.bookprint.models.dto.OperationResponse;
 import com.ms.printing.bookprint.repositories.CartProductMappingRepository;
 import com.ms.printing.bookprint.repositories.ProductRepository;
-import com.ms.printing.integration.config.IntegrationTestConfig;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +58,6 @@ import static org.junit.Assert.assertNotNull;
         classes = Application.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:applicationIT.properties")
-@Import(value = {IntegrationTestConfig.class})
 @RunWith(SpringRunner.class)
 public abstract class BookPrintITBase {
 
