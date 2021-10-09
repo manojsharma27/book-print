@@ -1,3 +1,4 @@
+# for local testing
 docker run \
 	       --name pg_book_print \
 	       -e POSTGRES_DB=book_print_db \

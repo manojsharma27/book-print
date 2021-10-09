@@ -1,0 +1,50 @@
+#-- for local testing.....
+version: "3"
+services:
+  postgres:
+    image: postgres:11.8
+    network_mode: bridge
+    container_name: postgres-db
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=book_print_db
+      - POSTGRES_USER=book_user
+      - POSTGRES_PASSWORD=p@55w0rd!
+    restart: unless-stopped
+  # APP*****************************************
+  printserviceapp:
+    image: print-service-dock:latest
+    network_mode: bridge
+    container_name: print-service-app
+    expose:
+      - 8081
+    ports:
+      - 8081:8081
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    links:
+      - postgres
+  bookprintapp:
+    image: book-print-dock:latest
+    network_mode: bridge
+    container_name: book-print-app
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - printserviceapp
+    links:
+      - postgres
+      - printserviceapp
+volumes:
+  postgres-data:

@@ -1,6 +1,7 @@
 package com.ms.printing.bookprint.service;
 
 import com.ms.printing.bookprint.converters.DataModelMapper;
+import com.ms.printing.bookprint.exceptions.BookPrintException;
 import com.ms.printing.bookprint.exceptions.DataNotFoundException;
 import com.ms.printing.bookprint.models.Customer;
 import com.ms.printing.bookprint.repositories.CustomerRepository;
@@ -29,6 +30,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public UUID create(Customer customer) {
+        if (Objects.isNull(customer)) {
+            throw new BookPrintException("Invalid input");
+        }
         if (Objects.isNull(customer.getId())) {
             customer.setId(UUID.randomUUID());
         }
@@ -50,12 +54,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer getByEmail(String email) {
         CustomerEntity customerEntity = customerRepository.findByEmail(email);
+        if (Objects.isNull(customerEntity)) {
+            throw new DataNotFoundException("Customer with email:" + email + " not found");
+        }
         Customer customer = dataModelMapper.map(customerEntity, Customer.class);
         return customer;
     }
 
     @Override
     public void update(Customer customer) {
+        if (Objects.isNull(customer)) {
+            throw new BookPrintException("Invalid input");
+        }
         CustomerEntity customerEntity = dataModelMapper.map(customer, CustomerEntity.class);
         customerRepository.saveAndFlush(customerEntity);
     }

@@ -105,12 +105,12 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public int updateQuantity(UUID cartId, UUID productId, int quantity) {
-        CartProductMappingEntity mappingEntity = cartProductMappingRepository.findFirstByCartEntityIdAndProductEntityId(cartId, productId);
         if (quantity <= 0) {
             removeProduct(cartId, productId);
             return 0;
         }
 
+        CartProductMappingEntity mappingEntity = cartProductMappingRepository.findFirstByCartEntityIdAndProductEntityId(cartId, productId);
         mappingEntity.setQuantity(quantity);
         cartProductMappingRepository.saveAndFlush(mappingEntity);
         return quantity;

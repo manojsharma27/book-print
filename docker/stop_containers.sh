@@ -1,8 +1,8 @@
 #bin/bash
 
 PG_IMAGE="book-postgres"
-PRINT_SVC_IMAGE="print-svc-img"
-BOOK_PRINT_APP_IMAGE="book-print-img"
+PRINT_SVC_IMAGE="print-svc-cont"
+BOOK_PRINT_APP_IMAGE="book-print-cont"
 
 for img in $PG_IMAGE $PRINT_SVC_IMAGE $BOOK_PRINT_APP_IMAGE
 do

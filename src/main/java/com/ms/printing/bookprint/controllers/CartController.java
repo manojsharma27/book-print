@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/v1/cart", produces = {MediaType.APPLICATION_JSON_VALUE})
-@Api(value = "book-print", description = "The cart related operations API")
+@Api(value = "Cart APIs", description = "The cart related operations API")
 public class CartController {
 
     @Resource

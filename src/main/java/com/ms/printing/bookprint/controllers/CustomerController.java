@@ -3,6 +3,7 @@ package com.ms.printing.bookprint.controllers;
 import com.ms.printing.bookprint.models.Customer;
 import com.ms.printing.bookprint.models.dto.CustomerOperationResponse;
 import com.ms.printing.bookprint.service.CustomerService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,11 +24,6 @@ public class CustomerController {
 
     @Resource
     private CustomerService customerService;
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public String test() {
-        return "test value";
-    }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<CustomerOperationResponse> create(@ApiParam(name = "customer", required = true) @RequestBody Customer customer) {
