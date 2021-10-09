@@ -1,0 +1,7 @@
+FROM postgres:11.8
+ENV POSTGRES_DB book_print_db
+ENV POSTGRES_USER book_user
+ENV POSTGRES_PASSWORD p@55w0rd!
+COPY schema.sql /docker-entrypoint-initdb.d/1-schema.sql
+COPY data.sql /docker-entrypoint-initdb.d/2-data.sql
+EXPOSE 5432
