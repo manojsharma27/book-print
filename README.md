@@ -25,7 +25,7 @@ Note: As of now it supports only a simple book as product, and can be extended t
 
 ## Class structure
 
-![Class diagram for book-print app](design-doc/book-print-class-diag.png?raw=true "Class diagram")
+<img src="https://github.com/manojsharma27/book-print/blob/master/design-doc/book-print-class-diag.png" width="1024" height="800" alt="Class diagram for book-print app">
 
 ## Database structure
 
@@ -38,24 +38,11 @@ Note: As of now it supports only a simple book as product, and can be extended t
 * Shipment
 * PaymentDetails
 
-![ER diagram for book-print app DB](design-doc/book-print-ER-diagram.png?raw=true "Entity-Relationship diagram")
+<img src="https://github.com/manojsharma27/book-print/blob/master/design-doc/book-print-ER-diagram.png" width="500" height="700" alt="ER diagram for book-print app DB">
 
 ## Checkout flow
 
-```mermaid
-sequenceDiagram
-Customer ->> Cart: Add products
-Cart -->> Cart: Update product quantities
-Customer ->> Checkout Manager: Checkout the cart
-Checkout Manager -->> Checkout Manager: Do checkout
-Note right of Checkout Manager: Calculate charges wrt<br/>products and delivery.<br/>Do payment.<br/>Generate Orders.
-Checkout Manager -->> Printing Service: Submit print and shipment order
-Checkout Manager -->> Customer: Update that orders are placed
-Customer ->> Order Api: Track order shipment
-Order Api ->> Printing Service: Track shipment
-Printing Service ->> Order Api: Shipment tracking info
-Order Api ->> Customer: Shipment tracking info
-```
+<img src="https://github.com/manojsharma27/book-print/blob/master/design-doc/book-print-checkout-flow.png" width="1024" height="800" alt="Checkout product workflow">
 
 ## Tech stack used:
 
@@ -68,13 +55,7 @@ Order Api ->> Customer: Shipment tracking info
 
 ## Functional components
 
-```mermaid
-graph LR
-A[Square Rect] -- Link text --> B((Circle))
-A --> C(Round Rect)
-B --> D{Rhombus}
-C --> D
-```
+<img src="https://github.com/manojsharma27/book-print/blob/master/design-doc/book-print-component-diag.png" width="600" height="500" alt="Major Components">
 
 # Running the application:
 This application can be run in different ways as mentioned below.
