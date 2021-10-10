@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,7 +28,11 @@ import java.util.UUID;
 })
 public abstract class Product {
     private UUID id;
+
+    @NotNull(message = "INVALID_PRODUCT_TYPE")
     private ProductType productType;
+
+    @NotNull(message = "INVALID_PRODUCT_NAME")
     private String name;
     private double price;
     private String imageUrl;

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,27 +31,29 @@ public class OrderController {
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "Get the order details for the provided orderId")
-    public ResponseEntity<Order> getOrder(@ApiParam(name = "orderId", required = true) @PathVariable(value = "orderId") String orderId) {
+    public ResponseEntity<Order> getOrder(@NotEmpty  @ApiParam(name = "orderId", required = true) @PathVariable(value = "orderId") String orderId) {
         Order order = orderService.getOrder(UUID.fromString(orderId));
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "Get the order details of the customer identified by customerId")
-    public ResponseEntity<List<Order>> getOrdersForUser(@ApiParam(name = "customerId", required = true) @RequestParam(value = "customerId") String customerId) {
+    public ResponseEntity<List<Order>> getOrdersForUser(@NotEmpty @ApiParam(name = "customerId", required = true) @RequestParam(value = "customerId") String customerId) {
         List<Order> orders = orderService.getOrdersForUser(UUID.fromString(customerId));
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.DELETE)
-    public ResponseEntity<OperationResponse> delete(@ApiParam(name = "orderId", required = true) @PathVariable("orderId") String orderId) {
+    @ApiOperation(httpMethod = "DELETE", value = "Delete an order by orderId")
+    public ResponseEntity<OperationResponse> delete(@NotEmpty @ApiParam(name = "orderId", required = true) @PathVariable("orderId") String orderId) {
         UUID orderIdUuid = UUID.fromString(orderId);
         orderService.delete(orderIdUuid);
         return new ResponseEntity<>(OperationResponse.builder().orderId(orderIdUuid).message("Deleted order").build(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{orderId}/track", method = RequestMethod.GET)
-    public ResponseEntity<ShipmentTrackingDetails> trackShipment(@ApiParam(name = "orderId", required = true) @PathVariable("orderId") String orderId) {
+    @ApiOperation(httpMethod = "GET", value = "Track an order by orderId")
+    public ResponseEntity<ShipmentTrackingDetails> trackShipment(@NotEmpty @ApiParam(name = "orderId", required = true) @PathVariable("orderId") String orderId) {
         UUID orderIdUuid = UUID.fromString(orderId);
         ShipmentTrackingDetails shipmentTrackingDetails = orderService.trackShipment(orderIdUuid);
         return new ResponseEntity<>(shipmentTrackingDetails, HttpStatus.OK);

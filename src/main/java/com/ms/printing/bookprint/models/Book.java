@@ -12,6 +12,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -22,10 +24,14 @@ public class Book extends Product {
 
     public static final String TYPE = "Book";
 
+    @NotNull(message = "INVALID_BOOK_TYPE")
     private BookType bookType;
+
     private Binding binding;
     private PaperType paperType;
     private CoverType coverType;
+
+    @NotNull(message = "INVALID_BOOK_TYPE")
     private Size size;
     private int pages;
 

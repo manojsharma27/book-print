@@ -7,6 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.UUID;
@@ -47,6 +50,15 @@ public class CustomerControllerIT extends BookPrintITBase {
         customer = customerEntity.getBody();
         assertNotNull(customer);
         assertEquals(customerId, customer.getId());
+    }
+
+    @Test
+    public void testCustomerCreateWithNoData() {
+        String url = url(CUSTOMER_API);
+        HttpEntity<Customer> httpEntity = new HttpEntity<>(new Customer(), httpHeaders);
+        ResponseEntity<CustomerOperationResponse> responseEntity = authenticatedTemplate.exchange(url, HttpMethod.POST, httpEntity, CustomerOperationResponse.class);
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @After

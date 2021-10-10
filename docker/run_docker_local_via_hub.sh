@@ -4,7 +4,7 @@ PG_IMAGE="ms27/book-print-demo:book-postgres"
 PRINT_SVC_IMAGE="ms27/book-print-demo:print-svc-img"
 BOOK_PRINT_APP_IMAGE="ms27/book-print-demo:book-print-img"
 
-PG_CONTAINER="book-postgres"
+PG_CONTAINER="book-pg-cont"
 PRINT_SVC_CONTAINER="print-svc-cont"
 BOOK_PRINT_APP_CONTAINER="book-print-cont"
 

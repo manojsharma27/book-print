@@ -62,9 +62,9 @@ import static org.junit.Assert.assertNotNull;
 public abstract class BookPrintITBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BookPrintITBase.class);
-    private static final String CUSTOMER_API = "/v1/customer";
-    private static final String CART_API = "/v1/cart";
-    private static final String ORDERS_API = "/v1/orders";
+    protected static final String CUSTOMER_API = "/v1/customer";
+    protected static final String CART_API = "/v1/cart";
+    protected static final String ORDERS_API = "/v1/orders";
 
     @LocalServerPort
     private int port = 0;

@@ -7,13 +7,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -31,6 +32,7 @@ public class CustomerControllerTest {
 
     @Test
     public void testCreate() {
+        when(customerService.create(any(Customer.class))).thenReturn(TEST_UUID);
         ResponseEntity<CustomerOperationResponse> responseEntity = customerController.create(customer);
         assertNotNull(responseEntity);
         assertNotNull(responseEntity.getBody());

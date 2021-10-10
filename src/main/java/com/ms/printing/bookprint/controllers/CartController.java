@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.UUID;
 
+@Validated
 @RestController
 @RequestMapping(value = "/v1/cart", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Api(value = "Cart APIs", description = "The cart related operations API")
@@ -34,22 +36,22 @@ public class CartController {
 
     @RequestMapping(value = "/{cartId}", method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "Get the cart details for the provided cartId")
-    public ResponseEntity<CartDto> getCart(@ApiParam(name = "cartId", required = true) @PathVariable(value = "cartId") String cartId) {
+    public ResponseEntity<CartDto> getCart(@NotEmpty @ApiParam(name = "cartId", required = true) @PathVariable(value = "cartId") String cartId) {
         CartDto cart = cartService.getCart(UUID.fromString(cartId));
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(httpMethod = "GET", value = "Get the cart details of the customer identified by customerId")
-    public ResponseEntity<CartDto> getCartForUser(@ApiParam(name = "customerId", required = true) @RequestParam(value = "customerId") String customerId) {
+    public ResponseEntity<CartDto> getCartForUser(@NotEmpty @ApiParam(name = "customerId", required = true) @RequestParam(value = "customerId") String customerId) {
         CartDto cart = cartService.getCartForUser(UUID.fromString(customerId));
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{cartId}/addProduct", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(httpMethod = "POST", value = "Adds the product to the specified cart")
-    public ResponseEntity<OperationResponse> addProduct(@ApiParam(name = "cartId", required = true) @PathVariable(value = "cartId") String cartId,
-                                                        @RequestBody Product product) {
+    public ResponseEntity<OperationResponse> addProduct(@NotEmpty @ApiParam(name = "cartId", required = true) @PathVariable(value = "cartId") String cartId,
+                                                        @Validated @RequestBody Product product) {
         UUID cartIdUuid = UUID.fromString(cartId);
         UUID productId = cartService.addProduct(cartIdUuid, product);
         OperationResponse response = OperationResponse.builder()
@@ -61,8 +63,8 @@ public class CartController {
     }
 
     @RequestMapping(value = "/{cartId}/removeProduct", method = RequestMethod.POST)
-    public ResponseEntity<OperationResponse> removeProduct(@ApiParam(name = "cartId", required = true) @PathVariable(value = "cartId") String cartId,
-                                                           @ApiParam(name = "productId", required = true) @RequestParam(value = "productId") String productId) {
+    public ResponseEntity<OperationResponse> removeProduct(@NotEmpty @ApiParam(name = "cartId", required = true) @PathVariable(value = "cartId") String cartId,
+                                                           @NotEmpty @ApiParam(name = "productId", required = true) @RequestParam(value = "productId") String productId) {
         UUID cartIdUuid = UUID.fromString(cartId);
         UUID productIdUuid = UUID.fromString(productId);
         cartService.removeProduct(cartIdUuid, productIdUuid);
@@ -75,8 +77,8 @@ public class CartController {
     }
 
     @RequestMapping(value = "/{cartId}/updateQuantity", method = RequestMethod.PUT)
-    public ResponseEntity<OperationResponse> updateQuantity(@ApiParam(name = "cartId", required = true) @PathVariable(value = "cartId") String cartId,
-                                                            @ApiParam(name = "productId", required = true) @RequestParam(value = "productId") String productId,
+    public ResponseEntity<OperationResponse> updateQuantity(@NotEmpty @ApiParam(name = "cartId", required = true) @PathVariable(value = "cartId") String cartId,
+                                                            @NotEmpty @ApiParam(name = "productId", required = true) @RequestParam(value = "productId") String productId,
                                                             @ApiParam(name = "quantity", required = true) @RequestParam(value = "quantity") int quantity) {
         UUID cartIdUuid = UUID.fromString(cartId);
         UUID productIdUuid = UUID.fromString(productId);
@@ -102,7 +104,7 @@ public class CartController {
     }
 
     @RequestMapping(value = "/{cartId}", method = RequestMethod.DELETE)
-    public ResponseEntity<OperationResponse> delete(@ApiParam(name = "cartId", required = true) @PathVariable(value = "cartId") String cartId) {
+    public ResponseEntity<OperationResponse> delete(@NotEmpty @ApiParam(name = "cartId", required = true) @PathVariable(value = "cartId") String cartId) {
         UUID cartIdUuid = UUID.fromString(cartId);
         cartService.deleteCart(cartIdUuid);
         OperationResponse response = OperationResponse.builder()
