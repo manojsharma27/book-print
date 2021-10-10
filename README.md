@@ -56,6 +56,7 @@ Note: As of now it supports only a simple book as product, and can be extended t
 ## Functional components
 
 <img src="https://github.com/manojsharma27/book-print/blob/master/design-doc/book-print-component-diag.png" width="600" height="500" alt="Major Components">
+Note that, the dotted components are assumptions and not implemented specifically.
 
 # Running the application:
 This application can be run in different ways as mentioned below.
