@@ -25,7 +25,7 @@ Note: As of now it supports only a simple book as product, and can be extended t
 
 ## Class structure
 
-![Alt text](relative/path/to/img.jpg?raw=true "Title")
+![Class diagram for book-print app](design-doc/book-print-class-diag.png?raw=true "Class diagram")
 
 ## Database structure
 
@@ -38,7 +38,7 @@ Note: As of now it supports only a simple book as product, and can be extended t
 * Shipment
 * PaymentDetails
 
-![Alt text](relative/path/to/img.jpg?raw=true "Title")
+![ER diagram for book-print app DB](design-doc/book-print-ER-diagram.png?raw=true "Entity-Relationship diagram")
 
 ## Checkout flow
 
